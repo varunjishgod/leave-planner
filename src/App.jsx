@@ -26,6 +26,7 @@ import {
   writeSavedScenarios,
   saveScenario,
   deleteScenario,
+  combineScenarios,
 } from './logic/scenarios.js'
 import SummaryCard from './components/SummaryCard.jsx'
 import SubjectCard from './components/SubjectCard.jsx'
@@ -60,9 +61,12 @@ function subjectNumbers(course, plannedDays, isPlanning) {
 
 // The hint under the tabs: what can you do right now?
 // Plan Leave off = view only. On = Day wise is where you edit, Coursewise shows the result.
-function viewHint(isPlanning, view) {
+function viewHint(isPlanning, view, combinedNames) {
   if (!isPlanning) {
     return 'View only. Turn on Plan Leave to mark lectures absent.'
+  }
+  if (combinedNames.length >= 2) {
+    return 'Showing ' + combinedNames.join(' + ') + ' together (view only). Clear the selection in Combine plans to edit again.'
   }
   if (view === 'day') {
     return 'Tap a lecture (or a date for the whole day) to mark it absent. Tap again to undo.'
@@ -83,6 +87,10 @@ function App() {
   // Name of the saved plan being edited, or null if the marks on screen are not saved.
   const [activePlan, setActivePlan] = useState(null)
 
+  // Names of the plans picked in "Combine plans". With 2 or more picked,
+  // the screen shows all of their lectures together.
+  const [combinePicks, setCombinePicks] = useState([])
+
   // Side effect: whenever the saved list changes, write it to localStorage
   // so it is still there after a refresh. [scenarios] = "run when scenarios changes".
   useEffect(() => {
@@ -94,13 +102,10 @@ function App() {
     setIsPlanning(!isPlanning)
   }
 
-  // Every change to the marks goes through here.
-  // If a saved plan is open, the change is saved into that plan straight away.
+  // Every change to the marks goes through here. Changes are NOT saved into a plan
+  // until you tap that plan's Save button.
   function updateMarks(newKeys) {
     setPlannedKeys(newKeys)
-    if (activePlan !== null) {
-      setScenarios(saveScenario(scenarios, activePlan, newKeys))
-    }
   }
 
   // Called when a lecture bubble is tapped: mark it absent (or undo).
@@ -118,7 +123,7 @@ function App() {
     updateMarks([])
   }
 
-  // "New plan": create a plan with this name and open it.
+  // "New plan": create a plan with this name and start editing it.
   // If no plan is open, the marks on screen (not saved yet) go into the new plan.
   // If a plan is already open, the new plan starts empty, so it gets its own lectures.
   function handleCreatePlan(name) {
@@ -128,10 +133,41 @@ function App() {
     setPlannedKeys(startKeys)
   }
 
-  // "Open": show that plan's marks and keep editing it.
-  function handleOpenPlan(scenario) {
+  // "Edit": show that plan's marks on screen so you can change them.
+  function handleEditPlan(scenario) {
     setActivePlan(scenario.name)
     setPlannedKeys(scenario.plannedKeys)
+  }
+
+  // "Save": store the marks on screen into the plan being edited.
+  function handleSavePlan(name) {
+    setScenarios(saveScenario(scenarios, name, plannedKeys))
+  }
+
+  // Pick or unpick a plan in "Combine plans".
+  // Functional update: React gives us the newest list (`current`), so quick taps all count.
+  function handleTogglePick(name) {
+    setCombinePicks((current) =>
+      current.includes(name) ? current.filter((n) => n !== name) : [...current, name],
+    )
+  }
+
+  function handleClearPicks() {
+    setCombinePicks([])
+  }
+
+  // "Edit these lectures" (Combine plans): turn the combined lectures into normal,
+  // not-yet-saved marks you can change, and leave the combined view.
+  function handleUseCombined(keys) {
+    setActivePlan(null)
+    setPlannedKeys(keys)
+    setCombinePicks([])
+  }
+
+  // Works out the result of any list of marked lectures (used by Combine plans).
+  // Passed down as a prop, so the component does not need to know about days or courses.
+  function summarizeKeys(keys) {
+    return summarizePlan(days, courses, keys, THRESHOLD)
   }
 
   function handleDeletePlan(name) {
@@ -143,9 +179,17 @@ function App() {
 
   // ---- Derived values: worked out again on every render, never stored in state ----
 
-  // The sandbox copy: days with your marked lectures set to "planned" (absent).
+  // Combined view: 2 or more plans picked in "Combine plans" (only while planning).
+  const pickedPlans = scenarios.filter((s) => combinePicks.includes(s.name))
+  const isCombining = isPlanning && pickedPlans.length >= 2
+  const combined = combineScenarios(pickedPlans)
+
+  // The lectures shown as absent: all picked plans together, or your own marks.
+  const shownKeys = isCombining ? combined.keys : plannedKeys
+
+  // The sandbox copy: days with those lectures set to "planned" (absent).
   // The original `days` are never changed.
-  const plannedDays = applyPlan(days, plannedKeys)
+  const plannedDays = applyPlan(days, shownKeys)
 
   // Plan Leave on: green lectures with your marks. Off: every lecture grey.
   const shownDays = isPlanning ? plannedDays : unmarkedDays
@@ -195,7 +239,7 @@ function App() {
         atRiskNames={atRiskNames}
         isPlanning={isPlanning}
         onTogglePlanning={handleTogglePlanning}
-        plannedCount={plannedKeys.length}
+        plannedCount={isCombining ? 0 : plannedKeys.length}
         onClearPlan={handleClearPlan}
       />
 
@@ -208,15 +252,23 @@ function App() {
           threshold={THRESHOLD}
           safeLevel={SAFE_LEVEL}
           onCreate={handleCreatePlan}
-          onOpen={handleOpenPlan}
+          onEdit={handleEditPlan}
+          onSave={handleSavePlan}
           onDelete={handleDeletePlan}
+          summarize={summarizeKeys}
+          combinePicks={combinePicks}
+          onTogglePick={handleTogglePick}
+          onClearPicks={handleClearPicks}
+          onUseCombined={handleUseCombined}
         />
       )}
 
       <ViewTabs view={view} onChangeView={setView} />
 
       {/* One line telling you what you can do in this view */}
-      <p className="view-hint">{viewHint(isPlanning, view)}</p>
+      <p className={isCombining ? 'view-hint view-hint-combined' : 'view-hint'}>
+        {viewHint(isPlanning, view, isCombining ? pickedPlans.map((p) => p.name) : [])}
+      </p>
 
       {view === 'course' && (
         <>
@@ -248,8 +300,8 @@ function App() {
         <DayList
           days={shownDays}
           today={TODAY}
-          onTogglePeriod={isPlanning ? handleTogglePeriod : undefined}
-          onToggleDay={isPlanning ? handleToggleDay : undefined}
+          onTogglePeriod={isPlanning && !isCombining ? handleTogglePeriod : undefined}
+          onToggleDay={isPlanning && !isCombining ? handleToggleDay : undefined}
         />
       )}
     </main>
