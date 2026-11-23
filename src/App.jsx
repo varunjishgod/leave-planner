@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import './App.css'
 import courses from './data/courses.json'
-import pastDays from './data/days.json'
 import timetable from './data/timetable.json'
 import calendar from './data/calendar.json'
 import { THRESHOLD, TODAY } from './config.js'
@@ -22,22 +21,24 @@ import SummaryCard from './components/SummaryCard.jsx'
 import SubjectCard from './components/SubjectCard.jsx'
 import DayList from './components/DayList.jsx'
 
-// All working days of the semester: real past days (from SWI in the real app)
-// followed by upcoming days generated from the timetable and academic calendar.
+// Every working day of the semester, generated from the timetable and academic calendar.
+// Every lecture starts as present (green), so every subject starts at 100%.
 // Worked out once when the app loads; it never changes after that.
-const days = [...pastDays, ...generateDays(timetable, calendar, TODAY, calendar.semesterEnd)]
+const days = generateDays(timetable, calendar, calendar.semesterStart, calendar.semesterEnd)
 
-// Work out the numbers for one course from the planned copy of the days.
-// "now" only looks at past classes; "projected" looks at the whole semester with the plan.
+// Work out the numbers for one course.
+// "now" comes from the untouched days (all present = 100%);
+// "projected" comes from the copy with your marked absences.
 function subjectNumbers(course, plannedDays) {
-  const counts = countStatuses(plannedDays, course.code)
+  const baseCounts = countStatuses(days, course.code)
+  const plannedCounts = countStatuses(plannedDays, course.code)
   return {
     code: course.code,
     name: course.name,
     type: course.type,
-    now: currentStats(counts),
-    projected: projectedStats(counts),
-    allowed: allowedBunks(semesterTotal(counts), THRESHOLD),
+    now: currentStats(baseCounts),
+    projected: projectedStats(plannedCounts),
+    allowed: allowedBunks(semesterTotal(baseCounts), THRESHOLD),
   }
 }
 
@@ -51,25 +52,25 @@ function App() {
     setIsPlanning(!isPlanning)
   }
 
-  // Called when an upcoming period bubble is tapped.
+  // Called when a lecture bubble is tapped: mark it absent (or undo).
   function handleTogglePeriod(date, periodNumber) {
     setPlannedKeys(togglePeriod(plannedKeys, periodKey(date, periodNumber)))
   }
 
-  // Called when a date is tapped: plan (or un-plan) the whole day.
+  // Called when a date is tapped: mark the whole day absent (or undo).
   function handleToggleDay(day) {
     setPlannedKeys(toggleDay(plannedKeys, day))
   }
 
-  // Called by the "Clear plan" button: forget every planned period.
+  // Called by the "Clear plan" button: un-mark every lecture.
   function handleClearPlan() {
     setPlannedKeys([])
   }
 
   // ---- Derived values: worked out again on every render, never stored in state ----
 
-  // The sandbox copy: real days with planned periods marked "planned".
-  // The real `days` are never changed.
+  // The sandbox copy: days with your marked lectures set to "planned" (absent).
+  // The original `days` are never changed.
   const plannedDays = applyPlan(days, plannedKeys)
 
   // The day list shows the plan only while planning is switched on.
@@ -82,9 +83,8 @@ function App() {
   const labSubjects = subjects.filter((s) => s.type === 'lab')
 
   // Overall numbers: count every period of every course.
-  const overallCounts = countStatuses(plannedDays)
-  const overallNow = currentStats(overallCounts)
-  const overallProjected = projectedStats(overallCounts)
+  const overallNow = currentStats(countStatuses(days))
+  const overallProjected = projectedStats(countStatuses(plannedDays))
 
   // Subjects below the threshold: projected while planning, current otherwise.
   const atRiskNames = subjects

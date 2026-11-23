@@ -37,8 +37,9 @@ export function dayType(date, calendar) {
 }
 
 // Walk one day at a time from fromDate to endDate (both included) and return
-// every working day in the same shape as days.json:
-//   { date, periods: [{ number, courseCode, status: "upcoming" }] }
+// every working day:
+//   { date, periods: [{ number, courseCode, status: "present" }] }
+// Every lecture starts as "present" (green), so every subject starts at 100%.
 // plus `follows` on working Saturdays (e.g. "MON") and `exam` on CIA days (no periods).
 export function generateDays(timetable, calendar, fromDate, endDate) {
   const result = []
@@ -60,7 +61,7 @@ export function generateDays(timetable, calendar, fromDate, endDate) {
         periods: slots.map((slot) => ({
           number: slot.number,
           courseCode: slot.courseCode,
-          status: 'upcoming',
+          status: 'present',
         })),
       }
       // Only Saturdays need a note about which timetable they follow.

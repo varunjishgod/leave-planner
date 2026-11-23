@@ -74,8 +74,8 @@ export function allowedBunks(totalBySemEnd, threshold) {
 }
 
 // ---------- Planner (sandbox) helpers ----------
-// The planner never edits the real data. It only keeps a list of "planned keys",
-// one string per period you plan to skip, e.g. "2026-11-25#3".
+// The planner never edits the base data. It only keeps a list of "planned keys",
+// one string per lecture you mark absent, e.g. "2026-09-25#3".
 
 // Build the key for one period: date + "#" + period number.
 export function periodKey(date, periodNumber) {
@@ -91,14 +91,19 @@ export function togglePeriod(plannedKeys, key) {
   return [...plannedKeys, key]
 }
 
-// Make a copy of the days where every planned upcoming period has status "planned".
-// The original days array (the real data) stays exactly the same.
+// A lecture you can mark absent: one that is present now (or already marked, so you can undo it).
+export function canMark(period) {
+  return period.status === 'present' || period.status === 'planned'
+}
+
+// Make a copy of the days where every marked lecture has status "planned" (counts as absent).
+// The original days array stays exactly the same.
 export function applyPlan(days, plannedKeys) {
   return days.map((day) => ({
     ...day,
     periods: day.periods.map((period) => {
       const isPlanned = plannedKeys.includes(periodKey(day.date, period.number))
-      if (isPlanned && period.status === 'upcoming') {
+      if (isPlanned && period.status === 'present') {
         return { ...period, status: 'planned' }
       }
       return period
@@ -106,24 +111,23 @@ export function applyPlan(days, plannedKeys) {
   }))
 }
 
-// Plan or unplan a whole day.
-// Only classes that have not happened yet (upcoming or already planned) are affected.
-// If every one of them is already planned, the whole day is removed from the plan;
+// Mark or unmark a whole day.
+// If every lecture of the day is already marked, the whole day is unmarked;
 // otherwise the missing ones are added. Returns a NEW list.
 export function toggleDay(plannedKeys, day) {
-  const futureKeys = []
+  const dayKeys = []
   for (const period of day.periods) {
-    if (period.status === 'upcoming' || period.status === 'planned') {
-      futureKeys.push(periodKey(day.date, period.number))
+    if (canMark(period)) {
+      dayKeys.push(periodKey(day.date, period.number))
     }
   }
 
-  const allPlanned = futureKeys.every((key) => plannedKeys.includes(key))
+  const allPlanned = dayKeys.every((key) => plannedKeys.includes(key))
 
   if (allPlanned) {
-    return plannedKeys.filter((key) => !futureKeys.includes(key))
+    return plannedKeys.filter((key) => !dayKeys.includes(key))
   }
 
-  const missingKeys = futureKeys.filter((key) => !plannedKeys.includes(key))
+  const missingKeys = dayKeys.filter((key) => !plannedKeys.includes(key))
   return [...plannedKeys, ...missingKeys]
 }

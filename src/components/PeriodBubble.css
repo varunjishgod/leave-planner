@@ -25,11 +25,16 @@
   color: var(--text-muted);
 }
 
-/* Planned absence (only in the planner's copy of the data) */
+/* Marked absent by you (only in the planner's copy of the data) */
 .bubble-planned {
-  background-color: var(--maroon-soft);
+  background-color: var(--maroon);
   border: 2px dashed var(--maroon-bright);
   color: var(--text);
+}
+
+/* Green lectures you can tap: show a border on hover */
+.bubble-tappable.bubble-present {
+  border: 2px solid transparent;
 }
 
 /* Bubbles you can tap while planning: reset default button look */

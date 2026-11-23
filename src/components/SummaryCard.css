@@ -8,7 +8,8 @@
 .summary-top {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .summary-percent {
@@ -79,6 +80,8 @@
 
 /* ---------- Plan Leave switch ---------- */
 .plan-toggle {
+  flex-shrink: 0; /* never squeeze the switch, even when the % text is long */
+  white-space: nowrap;
   display: flex;
   align-items: center;
   gap: 10px;

@@ -1,8 +1,8 @@
 import './PeriodBubble.css'
 
 // One numbered circle for one period.
-// The CSS class comes from the status: present (green), absent (maroon),
-// upcoming (outline) or planned (dashed maroon).
+// The CSS class comes from the status: present (green) or planned
+// (marked absent by you: maroon with a dashed border).
 // If `onTap` is given, the bubble is a button you can tap; otherwise it is plain text.
 function PeriodBubble({ period, onTap }) {
   const className = 'bubble bubble-' + period.status

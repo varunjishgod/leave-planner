@@ -26,7 +26,7 @@ function SummaryCard({
         <p className="summary-percent">
           <Projected
             current={now.percent.toFixed(2) + '%'}
-            projected={projected.percent.toFixed(2) + '% by sem end'}
+            projected={projected.percent.toFixed(2) + '% after marking'}
             showProjected={isPlanning}
           />
         </p>
@@ -85,14 +85,13 @@ function SummaryCard({
 
       {isPlanning && (
         <p className="summary-hint">
-          Tap upcoming periods or dates below to plan leave. Projected values assume you attend
-          every other class.
+          Tap any lecture (or a date for the whole day) to mark it absent. Tap again to undo.
         </p>
       )}
 
       {isPlanning && plannedCount > 0 && (
         <button type="button" className="clear-plan" onClick={onClearPlan}>
-          Clear plan ({plannedCount} {plannedCount === 1 ? 'period' : 'periods'})
+          Clear all ({plannedCount} {plannedCount === 1 ? 'lecture' : 'lectures'} marked)
         </button>
       )}
     </section>
