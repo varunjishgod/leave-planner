@@ -2,6 +2,7 @@ import './SummaryCard.css'
 import ProgressBar from './ProgressBar.jsx'
 import StatChip from './StatChip.jsx'
 import Projected from './Projected.jsx'
+import { attendanceTone } from '../logic/attendance.js'
 
 // The top card: big attendance %, Plan Leave switch, progress bar and four stat chips.
 // It only displays numbers; App works them out and passes them in as props.
@@ -9,17 +10,22 @@ import Projected from './Projected.jsx'
 // While planning, every value is shown as "current → projected".
 // The buttons do not change anything themselves: they call the functions App gave us.
 // atRiskNames lists subjects below the threshold (projected while planning, current otherwise).
+// The big % and bar use the same green / yellow / red bands as the subject cards.
 function SummaryCard({
   now,
   projected,
   bunksAllowed,
   threshold,
+  safeLevel,
   atRiskNames,
   isPlanning,
   onTogglePlanning,
   plannedCount,
   onClearPlan,
 }) {
+  const nowTone = attendanceTone(now.percent, threshold, safeLevel)
+  const projectedTone = attendanceTone(projected.percent, threshold, safeLevel)
+
   return (
     <section className="card summary-card">
       <div className="summary-top">
@@ -28,6 +34,8 @@ function SummaryCard({
             current={now.percent.toFixed(2) + '%'}
             projected={projected.percent.toFixed(2) + '% after marking'}
             showProjected={isPlanning}
+            currentTone={nowTone}
+            projectedTone={projectedTone}
           />
         </p>
 
@@ -45,7 +53,10 @@ function SummaryCard({
         </button>
       </div>
 
-      <ProgressBar percent={isPlanning ? projected.percent : now.percent} />
+      <ProgressBar
+        percent={isPlanning ? projected.percent : now.percent}
+        tone={isPlanning ? projectedTone : nowTone}
+      />
 
       <div className="summary-chips">
         <StatChip

@@ -35,6 +35,20 @@ export function isBelowThreshold(percent, threshold) {
   return percent < threshold
 }
 
+// Which colour band a percentage falls in:
+//   "good"    (green)  — at or above safeLevel, e.g. 80% and up
+//   "warning" (yellow) — at or above threshold but below safeLevel, e.g. 75% to 79.99%
+//   "danger"  (red)    — below threshold, e.g. under 75%
+export function attendanceTone(percent, threshold, safeLevel) {
+  if (percent < threshold) {
+    return 'danger'
+  }
+  if (percent < safeLevel) {
+    return 'warning'
+  }
+  return 'good'
+}
+
 // Attendance as it stands today: only classes that already happened.
 export function currentStats(counts) {
   const total = counts.present + counts.absent

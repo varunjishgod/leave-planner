@@ -1,19 +1,23 @@
 import './SubjectCard.css'
 import ProgressBar from './ProgressBar.jsx'
 import Projected from './Projected.jsx'
-import { isBelowThreshold } from '../logic/attendance.js'
+import { isBelowThreshold, attendanceTone } from '../logic/attendance.js'
 
 // One card per course: name, %, progress bar, classes attended and bunks.
 // `subject` is one object made by subjectNumbers() in App.jsx:
 // { code, name, type, now, projected, allowed }.
 // While planning, % and bunks are shown as "current → projected".
-// Anything below the threshold (or over the bunk limit) is shown in red.
-function SubjectCard({ subject, isPlanning, threshold }) {
+// The % and bar are green (at or above safeLevel), yellow (between threshold
+// and safeLevel) or red (below threshold). Bunks over the limit are red.
+function SubjectCard({ subject, isPlanning, threshold, safeLevel }) {
   const { now, projected } = subject
 
-  const nowLow = isBelowThreshold(now.percent, threshold)
-  const projectedLow = isBelowThreshold(projected.percent, threshold)
-  const shownLow = isPlanning ? projectedLow : nowLow
+  const nowTone = attendanceTone(now.percent, threshold, safeLevel)
+  const projectedTone = attendanceTone(projected.percent, threshold, safeLevel)
+
+  const shownPercent = isPlanning ? projected.percent : now.percent
+  const shownTone = isPlanning ? projectedTone : nowTone
+  const shownLow = isBelowThreshold(shownPercent, threshold)
 
   return (
     <article className="subject-card">
@@ -29,13 +33,13 @@ function SubjectCard({ subject, isPlanning, threshold }) {
             current={now.percent.toFixed(2) + '%'}
             projected={projected.percent.toFixed(2) + '%'}
             showProjected={isPlanning}
-            currentWarn={nowLow}
-            projectedWarn={projectedLow}
+            currentTone={nowTone}
+            projectedTone={projectedTone}
           />
         </p>
       </div>
 
-      <ProgressBar percent={isPlanning ? projected.percent : now.percent} warn={shownLow} />
+      <ProgressBar percent={shownPercent} tone={shownTone} />
 
       <div className="subject-bottom">
         <p className="subject-attended">
@@ -47,8 +51,8 @@ function SubjectCard({ subject, isPlanning, threshold }) {
             current={now.absent + '/' + subject.allowed}
             projected={projected.absent + '/' + subject.allowed}
             showProjected={isPlanning}
-            currentWarn={now.absent > subject.allowed}
-            projectedWarn={projected.absent > subject.allowed}
+            currentTone={now.absent > subject.allowed ? 'danger' : undefined}
+            projectedTone={projected.absent > subject.allowed ? 'danger' : undefined}
           />
         </p>
       </div>

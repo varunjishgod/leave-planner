@@ -1,7 +1,8 @@
+/* Neutral track so green, yellow and red fills all read clearly */
 .progress-track {
   height: 6px;
   border-radius: 999px;
-  background-color: var(--yellow-track);
+  background-color: var(--bar-track);
   overflow: hidden;
 }
 
@@ -11,6 +12,14 @@
   background-color: var(--yellow);
 }
 
-.progress-fill-warn {
+.progress-fill-good {
+  background-color: var(--good);
+}
+
+.progress-fill-warning {
+  background-color: var(--yellow);
+}
+
+.progress-fill-danger {
   background-color: var(--red);
 }

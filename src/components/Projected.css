@@ -7,8 +7,16 @@
   white-space: nowrap;
 }
 
-/* Below the threshold. ".projected span" is more specific than the cards' own
-   rules (like ".summary-chips .projected-next"), so red always wins. */
-.projected span.is-warn {
+/* Colour bands. ".projected span" is more specific than the cards' own
+   rules (like ".summary-chips .projected-next"), so the tone always wins. */
+.projected span.tone-good {
+  color: var(--good);
+}
+
+.projected span.tone-warning {
+  color: var(--yellow);
+}
+
+.projected span.tone-danger {
   color: var(--red);
 }

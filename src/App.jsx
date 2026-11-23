@@ -3,7 +3,7 @@ import './App.css'
 import courses from './data/courses.json'
 import timetable from './data/timetable.json'
 import calendar from './data/calendar.json'
-import { THRESHOLD, TODAY } from './config.js'
+import { THRESHOLD, SAFE_LEVEL, TODAY } from './config.js'
 import { generateDays } from './logic/schedule.js'
 import {
   countStatuses,
@@ -110,6 +110,7 @@ function App() {
         projected={overallProjected}
         bunksAllowed={overallAllowed}
         threshold={THRESHOLD}
+        safeLevel={SAFE_LEVEL}
         atRiskNames={atRiskNames}
         isPlanning={isPlanning}
         onTogglePlanning={handleTogglePlanning}
@@ -124,6 +125,7 @@ function App() {
           subject={subject}
           isPlanning={isPlanning}
           threshold={THRESHOLD}
+          safeLevel={SAFE_LEVEL}
         />
       ))}
 
@@ -134,6 +136,7 @@ function App() {
           subject={subject}
           isPlanning={isPlanning}
           threshold={THRESHOLD}
+          safeLevel={SAFE_LEVEL}
         />
       ))}
 

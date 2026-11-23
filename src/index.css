@@ -10,13 +10,14 @@
   --text: #f2f4fa;          /* main text */
   --text-muted: #8d9eb0;    /* chip labels, secondary text */
   --text-faint: #616b86;    /* weekday names, least important text */
-  --yellow: #f9cc19;        /* attendance %, progress bar */
-  --yellow-track: #464332;  /* empty part of the progress bar */
+  --yellow: #f9cc19;        /* between THRESHOLD and SAFE_LEVEL; also accents */
   --green: #145455;         /* present bubble (measured from the reference) */
   --maroon: #5e2d40;        /* absent bubble (measured from the reference) */
   --maroon-soft: #3a2236;   /* Clear all button hover */
   --maroon-bright: #b24a67; /* fully marked date, Clear all border */
-  --red: #ff6b7a;           /* warning: below the attendance threshold */
+  --red: #ff6b7a;           /* below THRESHOLD (e.g. under 75%) */
+  --good: #4ade80;          /* at or above SAFE_LEVEL (e.g. 80% and up) */
+  --bar-track: #2b3350;     /* empty part of a progress bar */
   --chip-present: #162c43;  /* PRESENT chip background */
   --chip-absent: #28243d;   /* ABSENT chip background */
   --chip-neutral: #212a47;  /* TOTAL / BUNKS chip background */
