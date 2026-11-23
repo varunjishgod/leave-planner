@@ -1,8 +1,9 @@
 [
-  { "code": "CSE201", "name": "Data Structures", "type": "theory" },
-  { "code": "CSE202", "name": "Database Management Systems", "type": "theory" },
-  { "code": "CSE203", "name": "Operating Systems", "type": "theory" },
-  { "code": "MAT201", "name": "Discrete Mathematics", "type": "theory" },
-  { "code": "CSE211", "name": "Data Structures Lab", "type": "lab" },
-  { "code": "CSE212", "name": "DBMS Lab", "type": "lab" }
+  { "code": "CSE103R01", "name": "Data Structures", "type": "theory" },
+  { "code": "CSE105", "name": "Computer Organization", "type": "theory" },
+  { "code": "CSE208", "name": "Java Programming", "type": "theory" },
+  { "code": "ECE101R01", "name": "Digital System Design", "type": "theory" },
+  { "code": "MAT201R01", "name": "Engineering Mathematics - III", "type": "theory" },
+  { "code": "CSE104R01", "name": "Data Structures Laboratory", "type": "lab" },
+  { "code": "ECE103", "name": "Digital System Design Laboratory", "type": "lab" }
 ]

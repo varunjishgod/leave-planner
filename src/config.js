@@ -3,11 +3,8 @@
 // Minimum attendance (in %) each subject must keep.
 export const THRESHOLD = 75
 
-// "Today" is fixed so the demo always looks the same.
-// Days before TODAY are past (already marked present/absent).
-// TODAY and later are upcoming (can be planned as leave).
-export const TODAY = '2026-11-23'
-
-// Last working day of the semester. Upcoming days are generated
-// from TODAY up to and including this date (see src/logic/schedule.js).
-export const SEMESTER_END = '2026-12-11'
+// "Today" is fixed so the demo always looks the same (day 55 of 82, just after CIA II).
+// Days before TODAY are past (already marked present/absent, in days.json).
+// TODAY and later are upcoming (generated from the timetable; can be planned as leave).
+// Semester dates, holidays, working Saturdays and CIA days live in data/calendar.json.
+export const TODAY = '2026-09-21'

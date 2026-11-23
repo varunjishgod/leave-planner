@@ -1,47 +1,37 @@
 {
   "MON": [
-    { "number": 1, "courseCode": "CSE201" },
-    { "number": 2, "courseCode": "CSE202" },
-    { "number": 3, "courseCode": "CSE203" },
-    { "number": 4, "courseCode": "MAT201" },
-    { "number": 5, "courseCode": "CSE211" },
-    { "number": 6, "courseCode": "CSE211" },
-    { "number": 7, "courseCode": "CSE211" }
+    { "number": 1, "courseCode": "CSE208" },
+    { "number": 2, "courseCode": "CSE208" },
+    { "number": 3, "courseCode": "ECE101R01" },
+    { "number": 4, "courseCode": "CSE103R01" },
+    { "number": 6, "courseCode": "CSE105" },
+    { "number": 7, "courseCode": "CSE208" }
   ],
   "TUE": [
-    { "number": 1, "courseCode": "CSE203" },
-    { "number": 2, "courseCode": "MAT201" },
-    { "number": 3, "courseCode": "CSE201" },
-    { "number": 4, "courseCode": "CSE202" },
-    { "number": 5, "courseCode": "MAT201" },
-    { "number": 6, "courseCode": "CSE203" },
-    { "number": 7, "courseCode": "CSE201" }
+    { "number": 1, "courseCode": "MAT201R01" },
+    { "number": 2, "courseCode": "ECE101R01" },
+    { "number": 3, "courseCode": "CSE103R01" },
+    { "number": 4, "courseCode": "CSE208" }
   ],
   "WED": [
-    { "number": 1, "courseCode": "CSE202" },
-    { "number": 2, "courseCode": "CSE201" },
-    { "number": 3, "courseCode": "MAT201" },
-    { "number": 4, "courseCode": "CSE203" },
-    { "number": 5, "courseCode": "CSE212" },
-    { "number": 6, "courseCode": "CSE212" },
-    { "number": 7, "courseCode": "CSE212" }
+    { "number": 1, "courseCode": "ECE103" },
+    { "number": 2, "courseCode": "ECE103" },
+    { "number": 3, "courseCode": "CSE103R01" },
+    { "number": 4, "courseCode": "ECE101R01" },
+    { "number": 6, "courseCode": "CSE105" },
+    { "number": 7, "courseCode": "MAT201R01" }
   ],
   "THU": [
-    { "number": 1, "courseCode": "MAT201" },
-    { "number": 2, "courseCode": "CSE203" },
-    { "number": 3, "courseCode": "CSE202" },
-    { "number": 4, "courseCode": "CSE201" },
-    { "number": 5, "courseCode": "CSE203" },
-    { "number": 6, "courseCode": "CSE202" },
-    { "number": 7, "courseCode": "MAT201" }
+    { "number": 1, "courseCode": "CSE103R01" },
+    { "number": 2, "courseCode": "MAT201R01" },
+    { "number": 3, "courseCode": "CSE208" },
+    { "number": 4, "courseCode": "CSE105" }
   ],
   "FRI": [
-    { "number": 1, "courseCode": "CSE201" },
-    { "number": 2, "courseCode": "CSE202" },
-    { "number": 3, "courseCode": "CSE203" },
-    { "number": 4, "courseCode": "MAT201" },
-    { "number": 5, "courseCode": "CSE201" },
-    { "number": 6, "courseCode": "CSE203" },
-    { "number": 7, "courseCode": "CSE202" }
+    { "number": 3, "courseCode": "CSE105" },
+    { "number": 5, "courseCode": "MAT201R01" },
+    { "number": 6, "courseCode": "ECE101R01" },
+    { "number": 7, "courseCode": "CSE104R01" },
+    { "number": 8, "courseCode": "CSE104R01" }
   ]
 }

@@ -3,9 +3,9 @@ import './App.css'
 import courses from './data/courses.json'
 import pastDays from './data/days.json'
 import timetable from './data/timetable.json'
-import holidays from './data/holidays.json'
-import { THRESHOLD, TODAY, SEMESTER_END } from './config.js'
-import { generateFutureDays } from './logic/schedule.js'
+import calendar from './data/calendar.json'
+import { THRESHOLD, TODAY } from './config.js'
+import { generateDays } from './logic/schedule.js'
 import {
   countStatuses,
   currentStats,
@@ -22,10 +22,10 @@ import SummaryCard from './components/SummaryCard.jsx'
 import SubjectCard from './components/SubjectCard.jsx'
 import DayList from './components/DayList.jsx'
 
-// All days of the semester: real past days (from SWI in the real app)
-// followed by upcoming days generated from the weekly timetable.
+// All working days of the semester: real past days (from SWI in the real app)
+// followed by upcoming days generated from the timetable and academic calendar.
 // Worked out once when the app loads; it never changes after that.
-const days = [...pastDays, ...generateFutureDays(timetable, holidays, TODAY, SEMESTER_END)]
+const days = [...pastDays, ...generateDays(timetable, calendar, TODAY, calendar.semesterEnd)]
 
 // Work out the numbers for one course from the planned copy of the days.
 // "now" only looks at past classes; "projected" looks at the whole semester with the plan.

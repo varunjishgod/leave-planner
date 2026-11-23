@@ -58,6 +58,27 @@
   font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--text-faint);
+  text-align: right;
+}
+
+/* Small second line under "SAT", e.g. "MON TT" */
+.day-follows {
+  display: block;
+  margin-top: 2px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--yellow);
+}
+
+/* CIA exam day label (shown instead of bubbles) */
+.day-exam {
+  height: 26px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
 }
 
 .day-today {

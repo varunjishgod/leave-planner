@@ -1,0 +1,28 @@
+{
+  "semesterStart": "2026-07-09",
+  "semesterEnd": "2026-10-28",
+  "workingSaturdays": [
+    { "date": "2026-07-11", "follows": "MON" },
+    { "date": "2026-07-25", "follows": "THU" },
+    { "date": "2026-08-08", "follows": "FRI" },
+    { "date": "2026-08-22", "follows": "MON" },
+    { "date": "2026-10-10", "follows": "FRI" },
+    { "date": "2026-10-24", "follows": "THU" }
+  ],
+  "examDays": [
+    { "date": "2026-08-10", "name": "CIA I" },
+    { "date": "2026-08-11", "name": "CIA I" },
+    { "date": "2026-08-12", "name": "CIA I" },
+    { "date": "2026-09-17", "name": "CIA II" },
+    { "date": "2026-09-18", "name": "CIA II" },
+    { "date": "2026-09-19", "name": "CIA II" }
+  ],
+  "holidays": [
+    { "date": "2026-08-15", "name": "Independence Day" },
+    { "date": "2026-08-27", "name": "Avani Avittam" },
+    { "date": "2026-08-28", "name": "Gayathri Japam" },
+    { "date": "2026-09-14", "name": "Vinayagar Chaturti" },
+    { "date": "2026-10-02", "name": "Gandhi Jayanthi" },
+    { "date": "2026-10-19", "name": "Saraswathi Pooja" }
+  ]
+}

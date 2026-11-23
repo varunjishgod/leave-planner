@@ -36,6 +36,9 @@ function DayRow({ day, isToday, onTogglePeriod, onToggleDay }) {
       <span className="day-divider"></span>
 
       <div className="day-bubbles">
+        {/* CIA days are working days with exams only: no periods, just a label */}
+        {day.exam && <span className="day-exam">{day.exam} · exams only</span>}
+
         {day.periods.map((period) => (
           <PeriodBubble
             key={period.number}
@@ -47,6 +50,8 @@ function DayRow({ day, isToday, onTogglePeriod, onToggleDay }) {
 
       <span className={isToday ? 'day-weekday day-today' : 'day-weekday'}>
         {isToday ? 'TODAY' : weekdayName(day.date)}
+        {/* Working Saturday: show which weekday's timetable it follows */}
+        {day.follows && <span className="day-follows">{day.follows} TT</span>}
       </span>
     </div>
   )
