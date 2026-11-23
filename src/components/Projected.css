@@ -1,0 +1,14 @@
+/* Default: "→ projected" on the same line, slightly smaller and white */
+.projected-next {
+  margin-left: 4px;
+  font-size: 0.8em;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* Below the threshold. ".projected span" is more specific than the cards' own
+   rules (like ".summary-chips .projected-next"), so red always wins. */
+.projected span.is-warn {
+  color: var(--red);
+}

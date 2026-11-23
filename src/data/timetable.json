@@ -1,0 +1,47 @@
+{
+  "MON": [
+    { "number": 1, "courseCode": "CSE201" },
+    { "number": 2, "courseCode": "CSE202" },
+    { "number": 3, "courseCode": "CSE203" },
+    { "number": 4, "courseCode": "MAT201" },
+    { "number": 5, "courseCode": "CSE211" },
+    { "number": 6, "courseCode": "CSE211" },
+    { "number": 7, "courseCode": "CSE211" }
+  ],
+  "TUE": [
+    { "number": 1, "courseCode": "CSE203" },
+    { "number": 2, "courseCode": "MAT201" },
+    { "number": 3, "courseCode": "CSE201" },
+    { "number": 4, "courseCode": "CSE202" },
+    { "number": 5, "courseCode": "MAT201" },
+    { "number": 6, "courseCode": "CSE203" },
+    { "number": 7, "courseCode": "CSE201" }
+  ],
+  "WED": [
+    { "number": 1, "courseCode": "CSE202" },
+    { "number": 2, "courseCode": "CSE201" },
+    { "number": 3, "courseCode": "MAT201" },
+    { "number": 4, "courseCode": "CSE203" },
+    { "number": 5, "courseCode": "CSE212" },
+    { "number": 6, "courseCode": "CSE212" },
+    { "number": 7, "courseCode": "CSE212" }
+  ],
+  "THU": [
+    { "number": 1, "courseCode": "MAT201" },
+    { "number": 2, "courseCode": "CSE203" },
+    { "number": 3, "courseCode": "CSE202" },
+    { "number": 4, "courseCode": "CSE201" },
+    { "number": 5, "courseCode": "CSE203" },
+    { "number": 6, "courseCode": "CSE202" },
+    { "number": 7, "courseCode": "MAT201" }
+  ],
+  "FRI": [
+    { "number": 1, "courseCode": "CSE201" },
+    { "number": 2, "courseCode": "CSE202" },
+    { "number": 3, "courseCode": "CSE203" },
+    { "number": 4, "courseCode": "MAT201" },
+    { "number": 5, "courseCode": "CSE201" },
+    { "number": 6, "courseCode": "CSE203" },
+    { "number": 7, "courseCode": "CSE202" }
+  ]
+}

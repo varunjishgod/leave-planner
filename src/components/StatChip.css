@@ -1,0 +1,32 @@
+.stat-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 4px;
+  border-radius: 14px;
+}
+
+.stat-chip-present {
+  background-color: var(--chip-present);
+}
+
+.stat-chip-absent {
+  background-color: var(--chip-absent);
+}
+
+.stat-chip-neutral {
+  background-color: var(--chip-neutral);
+}
+
+.stat-chip-value {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.stat-chip-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}

@@ -13,7 +13,10 @@
   --yellow: #f9cc19;        /* attendance %, progress bar */
   --yellow-track: #464332;  /* empty part of the progress bar */
   --green: #175355;         /* present bubble */
-  --maroon: #5d2e3e;        /* absent bubble / planned absence */
+  --maroon: #5d2e3e;        /* absent bubble */
+  --maroon-soft: #3a2236;   /* planned absence fill */
+  --maroon-bright: #b24a67; /* planned absence dashed border */
+  --red: #ff6b7a;           /* warning: below the attendance threshold */
   --chip-present: #162c43;  /* PRESENT chip background */
   --chip-absent: #28243d;   /* ABSENT chip background */
   --chip-neutral: #212a47;  /* TOTAL / BUNKS chip background */

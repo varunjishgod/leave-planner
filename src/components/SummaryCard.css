@@ -1,0 +1,130 @@
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* % on the left, Plan Leave switch on the right (like "Apply ODs" in sastranet) */
+.summary-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-percent {
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--yellow);
+  letter-spacing: -0.01em;
+}
+
+/* Projected % goes on its own line under the big % */
+.summary-percent .projected-next {
+  display: block;
+  margin-left: 0;
+  margin-top: 2px;
+  font-size: 15px;
+  letter-spacing: 0;
+}
+
+/* Inside the chips, "→ projected" also goes on its own line */
+.summary-chips .projected-next {
+  display: block;
+  margin-left: 0;
+  font-size: 13px;
+  color: var(--yellow);
+}
+
+/* Four equal columns for the stat chips */
+.summary-chips {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.summary-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.summary-warning {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--red);
+  text-align: center;
+}
+
+.clear-plan {
+  align-self: center;
+  padding: 8px 16px;
+  border: 1px solid var(--maroon-bright);
+  border-radius: 999px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.clear-plan:hover {
+  background-color: var(--maroon-soft);
+}
+
+.clear-plan:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+/* ---------- Plan Leave switch ---------- */
+.plan-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.plan-toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.switch {
+  width: 46px;
+  height: 26px;
+  padding: 3px;
+  border-radius: 999px;
+  border: 2px solid var(--card-border);
+  display: flex;
+  align-items: center;
+}
+
+.switch-knob {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--text-faint);
+  transition: transform 0.2s;
+}
+
+.switch-on {
+  border-color: var(--yellow);
+}
+
+/* Slide the knob to the right and colour it yellow when on */
+.switch-on .switch-knob {
+  transform: translateX(20px);
+  background-color: var(--yellow);
+}
+
+.plan-toggle:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 4px;
+  border-radius: 8px;
+}

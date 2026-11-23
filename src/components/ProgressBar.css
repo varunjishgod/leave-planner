@@ -1,0 +1,16 @@
+.progress-track {
+  height: 6px;
+  border-radius: 999px;
+  background-color: var(--yellow-track);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background-color: var(--yellow);
+}
+
+.progress-fill-warn {
+  background-color: var(--red);
+}

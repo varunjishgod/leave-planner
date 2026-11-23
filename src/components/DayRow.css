@@ -1,0 +1,66 @@
+.day-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px;
+  background-color: var(--card);
+  border: 1px solid var(--row-border);
+  border-radius: 16px;
+}
+
+.day-number {
+  width: 34px;
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* The date while planning: a button that plans the whole day */
+.day-number-button {
+  padding: 2px 0;
+  border: 1px dashed transparent;
+  border-radius: 10px;
+  background: none;
+  color: var(--text);
+  font-family: inherit;
+  line-height: inherit;
+  cursor: pointer;
+}
+
+.day-number-button:hover {
+  border-color: var(--maroon-bright);
+}
+
+.day-number-button:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+/* Every future period of this day is planned */
+.day-planned {
+  color: var(--maroon-bright);
+}
+
+/* Thin vertical line between the date and the bubbles */
+.day-divider {
+  align-self: stretch;
+  width: 1px;
+  background-color: var(--divider);
+}
+
+.day-bubbles {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+}
+
+.day-weekday {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+.day-today {
+  color: var(--yellow);
+  font-weight: 700;
+}

@@ -1,0 +1,78 @@
+/* Smaller than the summary card, with the softer border used for day rows */
+.subject-card {
+  background-color: var(--card);
+  border: 1px solid var(--row-border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subject-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.subject-name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.subject-code {
+  margin-top: 2px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+.subject-percent {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--yellow);
+  white-space: nowrap;
+}
+
+/* Projected % goes under the current % */
+.subject-percent {
+  text-align: right;
+}
+
+.subject-percent .projected-next {
+  display: block;
+  margin-left: 0;
+  font-size: 14px;
+}
+
+.subject-bunks .projected-next {
+  font-size: 11px;
+  color: var(--yellow);
+}
+
+.subject-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subject-attended {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.subject-warning {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--red);
+}
+
+.subject-bunks {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: var(--chip-neutral);
+}
