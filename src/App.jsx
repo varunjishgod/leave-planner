@@ -80,6 +80,9 @@ function App() {
   // so we read localStorage once instead of on every render.
   const [scenarios, setScenarios] = useState(() => readSavedScenarios())
 
+  // Name of the saved plan being edited, or null if the marks on screen are not saved.
+  const [activePlan, setActivePlan] = useState(null)
+
   // Side effect: whenever the saved list changes, write it to localStorage
   // so it is still there after a refresh. [scenarios] = "run when scenarios changes".
   useEffect(() => {
@@ -91,32 +94,51 @@ function App() {
     setIsPlanning(!isPlanning)
   }
 
+  // Every change to the marks goes through here.
+  // If a saved plan is open, the change is saved into that plan straight away.
+  function updateMarks(newKeys) {
+    setPlannedKeys(newKeys)
+    if (activePlan !== null) {
+      setScenarios(saveScenario(scenarios, activePlan, newKeys))
+    }
+  }
+
   // Called when a lecture bubble is tapped: mark it absent (or undo).
   function handleTogglePeriod(date, periodNumber) {
-    setPlannedKeys(togglePeriod(plannedKeys, periodKey(date, periodNumber)))
+    updateMarks(togglePeriod(plannedKeys, periodKey(date, periodNumber)))
   }
 
   // Called when a date is tapped: mark the whole day absent (or undo).
   function handleToggleDay(day) {
-    setPlannedKeys(toggleDay(plannedKeys, day))
+    updateMarks(toggleDay(plannedKeys, day))
   }
 
-  // Saved plans: save the current marks under a name, load one back, or delete one.
-  function handleSaveScenario(name) {
-    setScenarios(saveScenario(scenarios, name, plannedKeys))
+  // Called by the "Clear all" button: un-mark every lecture (of the open plan).
+  function handleClearPlan() {
+    updateMarks([])
   }
 
-  function handleLoadScenario(scenario) {
+  // "New plan": create a plan with this name and open it.
+  // If no plan is open, the marks on screen (not saved yet) go into the new plan.
+  // If a plan is already open, the new plan starts empty, so it gets its own lectures.
+  function handleCreatePlan(name) {
+    const startKeys = activePlan === null ? plannedKeys : []
+    setScenarios(saveScenario(scenarios, name, startKeys))
+    setActivePlan(name)
+    setPlannedKeys(startKeys)
+  }
+
+  // "Open": show that plan's marks and keep editing it.
+  function handleOpenPlan(scenario) {
+    setActivePlan(scenario.name)
     setPlannedKeys(scenario.plannedKeys)
   }
 
-  function handleDeleteScenario(name) {
+  function handleDeletePlan(name) {
     setScenarios(deleteScenario(scenarios, name))
-  }
-
-  // Called by the "Clear plan" button: un-mark every lecture.
-  function handleClearPlan() {
-    setPlannedKeys([])
+    if (name === activePlan) {
+      setActivePlan(null) // its marks stay on screen, but are no longer saved anywhere
+    }
   }
 
   // ---- Derived values: worked out again on every render, never stored in state ----
@@ -182,11 +204,12 @@ function App() {
         <ScenarioPanel
           scenarios={scenarioResults}
           plannedKeys={plannedKeys}
+          activePlan={activePlan}
           threshold={THRESHOLD}
           safeLevel={SAFE_LEVEL}
-          onSave={handleSaveScenario}
-          onLoad={handleLoadScenario}
-          onDelete={handleDeleteScenario}
+          onCreate={handleCreatePlan}
+          onOpen={handleOpenPlan}
+          onDelete={handleDeletePlan}
         />
       )}
 

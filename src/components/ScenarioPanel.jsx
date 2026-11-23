@@ -4,26 +4,33 @@ import ScenarioCompare from './ScenarioCompare.jsx'
 import { attendanceTone } from '../logic/attendance.js'
 import { hasScenario } from '../logic/scenarios.js'
 
-// Same lectures marked, in any order?
-function sameKeys(a, b) {
-  return a.length === b.length && a.every((key) => b.includes(key))
-}
-
 // "Saved plans" card (only shown while Plan Leave is on).
+// Each plan has its own marked lectures. The open plan (`activePlan`) is saved
+// automatically every time you mark or unmark a lecture.
 // `scenarios` = saved plans, each with its worked-out `result` (from summarizePlan).
-// Saving, loading and deleting are done by App through the on... functions.
-function ScenarioPanel({ scenarios, plannedKeys, threshold, safeLevel, onSave, onLoad, onDelete }) {
+// Creating, opening and deleting are done by App through the on... functions.
+function ScenarioPanel({
+  scenarios,
+  plannedKeys,
+  activePlan,
+  threshold,
+  safeLevel,
+  onCreate,
+  onOpen,
+  onDelete,
+}) {
   // Local state: only this card needs to know what is typed in the box.
   const [name, setName] = useState('')
 
   const trimmed = name.trim()
-  const canSave = trimmed !== '' && plannedKeys.length > 0
-  const isUpdate = hasScenario(scenarios, trimmed)
+  const nameTaken = hasScenario(scenarios, trimmed)
+  const canCreate = trimmed !== '' && !nameTaken
 
   function handleSubmit(event) {
     event.preventDefault() // stop the browser from reloading the page
-    if (canSave) {
-      onSave(trimmed)
+    if (canCreate) {
+      onCreate(trimmed)
+      setName('')
     }
   }
 
@@ -33,9 +40,20 @@ function ScenarioPanel({ scenarios, plannedKeys, threshold, safeLevel, onSave, o
     }
   }
 
+  // One line saying what is happening right now.
+  let status
+  if (activePlan !== null) {
+    status = 'Editing “' + activePlan + '”. Every lecture you mark is saved into it.'
+  } else if (plannedKeys.length > 0) {
+    status = 'Your ' + plannedKeys.length + ' marked lectures are not saved. Name them to save as a plan.'
+  } else {
+    status = 'Name a new plan, then mark the lectures you would skip.'
+  }
+
   return (
     <section className="card scenario-card">
       <p className="scenario-title">Saved plans</p>
+      <p className="scenario-status">{status}</p>
 
       <form className="scenario-form" onSubmit={handleSubmit}>
         <input
@@ -43,18 +61,16 @@ function ScenarioPanel({ scenarios, plannedKeys, threshold, safeLevel, onSave, o
           type="text"
           value={name}
           onChange={(event) => setName(event.target.value)}
-          placeholder="Name this plan, e.g. Diwali trip"
+          placeholder="New plan name, e.g. Diwali trip"
           maxLength={40}
-          aria-label="Plan name"
+          aria-label="New plan name"
         />
-        <button type="submit" className="scenario-save" disabled={!canSave}>
-          {isUpdate ? 'Update' : 'Save'}
+        <button type="submit" className="scenario-save" disabled={!canCreate}>
+          New plan
         </button>
       </form>
 
-      {plannedKeys.length === 0 && (
-        <p className="scenario-note">Mark some lectures absent first, then save them as a plan.</p>
-      )}
+      {nameTaken && <p className="scenario-note">A plan with this name already exists.</p>}
 
       {scenarios.length === 0 ? (
         <p className="scenario-note">No saved plans yet.</p>
@@ -63,15 +79,15 @@ function ScenarioPanel({ scenarios, plannedKeys, threshold, safeLevel, onSave, o
           {scenarios.map((scenario) => {
             const percent = scenario.result.overall.percent
             const tone = attendanceTone(percent, threshold, safeLevel)
-            const isLoaded = sameKeys(scenario.plannedKeys, plannedKeys)
+            const isOpen = scenario.name === activePlan
             const count = scenario.plannedKeys.length
 
             return (
-              <li key={scenario.name} className="scenario-item">
+              <li key={scenario.name} className={isOpen ? 'scenario-item scenario-item-open' : 'scenario-item'}>
                 <div className="scenario-info">
                   <p className="scenario-name">
                     <span className="scenario-name-text">{scenario.name}</span>
-                    {isLoaded && <span className="scenario-loaded">ON SCREEN</span>}
+                    {isOpen && <span className="scenario-loaded">EDITING</span>}
                   </p>
                   <p className="scenario-meta">
                     {count} {count === 1 ? 'lecture' : 'lectures'} ·{' '}
@@ -81,13 +97,10 @@ function ScenarioPanel({ scenarios, plannedKeys, threshold, safeLevel, onSave, o
                 <button
                   type="button"
                   className="scenario-button"
-                  onClick={() => {
-                    onLoad(scenario)
-                    setName(scenario.name)
-                  }}
-                  disabled={isLoaded}
+                  onClick={() => onOpen(scenario)}
+                  disabled={isOpen}
                 >
-                  Load
+                  Open
                 </button>
                 <button
                   type="button"
