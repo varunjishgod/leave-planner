@@ -23,3 +23,7 @@
 .progress-fill-danger {
   background-color: var(--red);
 }
+
+.progress-fill-none {
+  background-color: var(--text-faint);
+}

@@ -22,6 +22,12 @@
   background-color: var(--green);
 }
 
+/* Nothing recorded yet (Plan Leave off): grey */
+.bubble-unmarked {
+  background-color: var(--unmarked);
+  color: var(--text-muted);
+}
+
 /* Absent, or marked absent by you: the same solid red as the real app */
 .bubble-absent,
 .bubble-planned {

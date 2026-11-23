@@ -145,3 +145,36 @@ export function toggleDay(plannedKeys, day) {
   const missingKeys = dayKeys.filter((key) => !plannedKeys.includes(key))
   return [...plannedKeys, ...missingKeys]
 }
+
+// ---------- View-only mode (Plan Leave off) ----------
+
+// A copy of the days where every lecture is "unmarked" (shown grey):
+// no attendance has been recorded yet. The original days are not changed.
+export function withoutAttendance(days) {
+  return days.map((day) => ({
+    ...day,
+    periods: day.periods.map((period) => ({ ...period, status: 'unmarked' })),
+  }))
+}
+
+// Numbers to show when nothing is recorded: everything 0, including 0%.
+export function emptyStats() {
+  return { present: 0, absent: 0, total: 0, percent: 0 }
+}
+
+// ---------- Comparing saved plans ----------
+
+// The end result of one plan: overall % and each subject's %, absences and bunk limit.
+// Used to show saved plans side by side. The days passed in are not changed.
+export function summarizePlan(days, courses, plannedKeys, threshold) {
+  const plannedDays = applyPlan(days, plannedKeys)
+  return {
+    overall: projectedStats(countStatuses(plannedDays)),
+    subjects: courses.map((course) => ({
+      code: course.code,
+      name: course.name,
+      ...projectedStats(countStatuses(plannedDays, course.code)),
+      allowed: allowedBunks(semesterTotal(countStatuses(days, course.code)), threshold),
+    })),
+  }
+}

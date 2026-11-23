@@ -9,7 +9,7 @@ import { attendanceTone } from '../logic/attendance.js'
 // `now` and `projected` are { present, absent, total, percent } objects.
 // While planning, every value is shown as "current → projected".
 // The buttons do not change anything themselves: they call the functions App gave us.
-// atRiskNames lists subjects below the threshold (projected while planning, current otherwise).
+// atRiskNames lists subjects that would end below the threshold (empty when not planning).
 // The big % and bar use the same green / yellow / red bands as the subject cards.
 function SummaryCard({
   now,
@@ -23,7 +23,8 @@ function SummaryCard({
   plannedCount,
   onClearPlan,
 }) {
-  const nowTone = attendanceTone(now.percent, threshold, safeLevel)
+  // Plan Leave off: nothing is recorded, so the 0% is grey ("none"), not red.
+  const nowTone = isPlanning ? attendanceTone(now.percent, threshold, safeLevel) : 'none'
   const projectedTone = attendanceTone(projected.percent, threshold, safeLevel)
 
   return (
@@ -89,14 +90,7 @@ function SummaryCard({
 
       {atRiskNames.length > 0 && (
         <p className="summary-warning">
-          {isPlanning ? 'With this plan, below ' : 'Below '}
-          {threshold}%{isPlanning ? '' : ' right now'}: {atRiskNames.join(', ')}
-        </p>
-      )}
-
-      {isPlanning && (
-        <p className="summary-hint">
-          Tap any lecture (or a date for the whole day) to mark it absent. Tap again to undo.
+          With this plan, below {threshold}%: {atRiskNames.join(', ')}
         </p>
       )}
 

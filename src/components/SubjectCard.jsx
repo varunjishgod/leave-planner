@@ -9,15 +9,17 @@ import { isBelowThreshold, attendanceTone } from '../logic/attendance.js'
 // While planning, % and bunks are shown as "current → projected".
 // The % and bar are green (at or above safeLevel), yellow (between threshold
 // and safeLevel) or red (below threshold). Bunks over the limit are red.
+// With Plan Leave off everything is 0 and grey.
 function SubjectCard({ subject, isPlanning, threshold, safeLevel }) {
   const { now, projected } = subject
 
-  const nowTone = attendanceTone(now.percent, threshold, safeLevel)
+  // Plan Leave off: nothing is recorded, so the 0% is grey ("none"), not red.
+  const nowTone = isPlanning ? attendanceTone(now.percent, threshold, safeLevel) : 'none'
   const projectedTone = attendanceTone(projected.percent, threshold, safeLevel)
 
   const shownPercent = isPlanning ? projected.percent : now.percent
   const shownTone = isPlanning ? projectedTone : nowTone
-  const shownLow = isBelowThreshold(shownPercent, threshold)
+  const shownLow = isPlanning && isBelowThreshold(projected.percent, threshold)
 
   return (
     <article className="subject-card">
@@ -58,11 +60,7 @@ function SubjectCard({ subject, isPlanning, threshold, safeLevel }) {
       </div>
 
       {shownLow && (
-        <p className="subject-warning">
-          {isPlanning
-            ? 'Ends below ' + threshold + '% with this plan'
-            : 'Below ' + threshold + '% right now'}
-        </p>
+        <p className="subject-warning">Ends below {threshold}% with this plan</p>
       )}
     </article>
   )

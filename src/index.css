@@ -18,6 +18,8 @@
   --red: #ff6b7a;           /* below THRESHOLD (e.g. under 75%) */
   --good: #4ade80;          /* at or above SAFE_LEVEL (e.g. 80% and up) */
   --bar-track: #2b3350;     /* empty part of a progress bar */
+  --unmarked: #2f3852;      /* grey lecture bubble when nothing is recorded */
+  --tab-active: #62697d;    /* selected Coursewise / Day wise tab (measured) */
   --chip-present: #162c43;  /* PRESENT chip background */
   --chip-absent: #28243d;   /* ABSENT chip background */
   --chip-neutral: #212a47;  /* TOTAL / BUNKS chip background */

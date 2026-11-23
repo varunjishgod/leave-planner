@@ -20,3 +20,8 @@
 .projected span.tone-danger {
   color: var(--red);
 }
+
+/* Nothing recorded yet (Plan Leave off) */
+.projected span.tone-none {
+  color: var(--text-faint);
+}
