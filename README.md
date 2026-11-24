@@ -1,11 +1,13 @@
-# Leave Planner: attendance what-if simulator for sastranet
+# Leave Planner
 
-A feature prototype for **sastranet**, SASTRA's student attendance app.
-Sastranet shows your attendance. **Leave Planner helps you plan it**: mark the lectures
-you might skip and instantly see how every subject's attendance and bunk budget change.
-You can also save plans, compare them, and combine them to check for an attendance shortage.
+A "what if I skip this?" planner for sastranet, SASTRA's attendance app.
 
-**Live demo:** https://varunjishgod.github.io/leave-planner/ (best on a phone, or in your browser's phone view)
+Sastranet only tells you your attendance so far. Before taking leave I always had to work out by hand
+how many classes I could still miss in each subject without going under 75%. So I built a prototype
+of a feature that does it for you: mark the lectures you plan to skip and it shows what your
+attendance would be at the end of the semester, subject by subject.
+
+Live demo: https://varunjishgod.github.io/leave-planner/ (made for a phone screen)
 
 <p>
   <img src="docs/screenshots/planner.jpg" alt="Summary card and saved plans" width="300" />
@@ -13,98 +15,69 @@ You can also save plans, compare them, and combine them to check for an attendan
   <img src="docs/screenshots/day-wise.jpg" alt="Day-wise list with planned absences in red" width="300" />
 </p>
 
-## Features
+## What it does
 
-- **Matches sastranet's attendance screen.** The same header, summary card, stat chips,
-  Coursewise / Day wise tabs and numbered period bubbles (green = present, red = absent).
-- **Plan Leave mode.** Every lecture starts green (100%). Tap a lecture, or a date for the
-  whole day, to mark it absent. Every value is shown as **current → projected**.
-- **Colour bands.** Green at 80% and above, yellow from 75% to under 80%, red below 75%,
-  for the overall % and for each subject.
-- **Per-subject bunk budget.** `BUNKS used/allowed`, where allowed = the most absences that
-  keep the subject at 75% or above by the end of the semester.
-- **Real academic calendar.** 82 working days, CIA exam days (working days with no classes),
-  holidays, and working Saturdays that follow a given weekday's timetable.
-- **Saved plans.** Create a plan (e.g. "Kerala trip"), then **Edit**, **Save** or **Delete** it.
-  Unsaved changes are flagged.
-- **Compare two plans** side by side, subject by subject.
-- **Combine plans.** Pick several plans to see the total effect: lectures missed (shared
-  lectures counted once), each subject's %, and a red **attendance shortage** box listing
-  every subject that would fall below 75%. All picked plans show red in the day list together.
-- **View-only mode.** With Plan Leave off, everything is grey and 0%: nothing is editable.
+- Looks like the sastranet attendance screen (same header, cards, stat chips and numbered period bubbles)
+- Turn on **Plan Leave** and every lecture starts as present (100%). Tap a lecture to mark it
+  absent, or tap a date to mark the whole day
+- Shows current → projected % for overall attendance and for every subject
+- Green at 80% and above, yellow between 75 and 80, red below 75
+- BUNKS used/allowed per subject
+- Save plans with a name (e.g. "Kerala trip") and edit, save or delete them later
+- Compare two plans, or combine a few of them to see if you'd end up with a shortage
+- With Plan Leave off the screen is just view only
 
-## How the numbers work
+The timetable and calendar are the real ones for my class (3-BCSE_NW-K, odd semester 2026-27):
+82 working days, CIA days count as working days but have no classes, and some Saturdays follow
+another day's timetable.
 
-All attendance maths is in [`src/logic/attendance.js`](src/logic/attendance.js) as small
-pure functions (no React), so it is easy to test and explain.
+## How the numbers are calculated
 
-| Value | Formula |
-|---|---|
-| Attendance % | `present ÷ total × 100` |
-| Projected % | every lecture you did **not** mark counts as present, every marked lecture as absent |
-| Allowed bunks | `floor(lecturesInSemester × (100 − threshold) ÷ 100)`, e.g. 60 × 25% = **15** |
-| Shortage | projected % below the threshold (75%) |
+All of it is in `src/logic/attendance.js`, as plain functions with no React in them.
 
-Example: Digital System Design has 60 lectures, so 15 bunks are allowed.
-The 16th absence gives 44 ÷ 60 = **73.33%**, which is a shortage.
+- attendance % = present / total × 100
+- projected %: anything you haven't marked counts as present, anything you marked counts as absent
+- allowed bunks = floor(total lectures in the semester × (100 − 75) / 100)
 
-## Design decisions
+For example Digital System Design has 60 lectures, so you get 15 bunks. Miss 16 and you're at
+44/60 = 73.33%.
 
-- **The real data is never changed.** The planner only stores a list of marked lectures
-  (keys like `"2026-09-22#3"`). `applyPlan()` returns a *copy* of the days with those
-  lectures marked, and every number is derived from that copy.
-- **Read-only towards SWI.** In the real app, attendance would come from SWI (read-only).
-  Saved plans live only in the browser's `localStorage`, on the student's own phone.
-- **Limits are config values, never hardcoded.** `THRESHOLD = 75` and `SAFE_LEVEL = 80`
-  in [`src/config.js`](src/config.js).
-- **Derived values instead of extra state.** Only a few things are state (Plan Leave on/off,
-  marked lectures, saved plans, the open plan, combined picks). Percentages, bunks, colours
-  and "unsaved changes" are worked out on every render, so they can never go out of date.
+The 75% limit is set in `src/config.js`, it's not hardcoded anywhere else.
 
-## Tech stack
+## A few decisions
 
-React 19 + Vite, plain JavaScript, functional components and hooks (`useState`, `useEffect`),
-plain CSS (no UI libraries), mobile-first (designed for a 390px wide phone).
+- The planner never changes the actual attendance data. It only keeps a list of marked lectures
+  (like `"2026-09-22#3"`) and builds a copy of the days with those marked absent.
+- In the real app the attendance would come from SWI, which is read only. Saved plans are just
+  stored in localStorage on your own phone.
+- Percentages, bunks and colours aren't stored in state. They're recalculated from the marked
+  lectures on every render so they can't go out of sync.
 
-## Project structure
+## Tech
+
+React + Vite, plain JavaScript and plain CSS (no UI library). Only `useState` and `useEffect`.
 
 ```
 src/
-  App.jsx                 state, handlers and layout
-  config.js               THRESHOLD, SAFE_LEVEL, TODAY
-  data/
-    courses.json          the class's 5 theory courses and 2 labs
-    timetable.json        weekly timetable (period numbers keep gaps for lunch/free periods)
-    calendar.json         semester dates, holidays, working Saturdays, CIA days
-  logic/                  pure functions, no React
-    attendance.js         counting, %, bunks, colour bands, plans
-    schedule.js           builds the 82 working days from timetable + calendar
-    scenarios.js          saved plans: storage, save/delete, combine
-    dates.js              date helpers (UTC, so time zones never shift a date)
-  components/             SummaryCard, SubjectCard, DayList, DayRow, PeriodBubble,
-                          ViewTabs, ScenarioPanel, ScenarioCompare, ScenarioCombine, ...
-docs/                     sastranet reference screenshots and README screenshots
+  App.jsx          state and layout
+  config.js        threshold (75), safe level (80), today's date
+  data/            courses, weekly timetable, academic calendar
+  logic/           attendance maths, schedule, saved plans, date helpers
+  components/      SummaryCard, SubjectCard, DayList, PeriodBubble, ScenarioPanel, ...
 ```
 
-## Run it locally
-
-You need [Node.js](https://nodejs.org/) installed.
+## Running it
 
 ```bash
 npm install
 npm run dev
 ```
 
-Then open the address it prints (usually http://localhost:5173), ideally in your browser's
-phone view at 390px width.
-
-Other commands: `npm run build` (production build), `npm run lint` (Oxlint) and
-`npm run deploy` (builds the site and publishes it to GitHub Pages).
+`npm run deploy` builds it and pushes it to GitHub Pages.
 
 ## Notes
 
-- This is a prototype. The timetable and calendar are for one class (3-BCSE_NW-K) in the
-  odd semester 2026–27. "Today" is fixed to 21 Sep 2026 in `config.js` so the demo is stable.
-- "Minor" timetable slots are not tracked.
-- The header image and the reference screenshots in `docs/` are from the sastranet app and
-  are used only to match its design for this feature pitch.
+- "Today" is fixed to 21 Sep 2026 in `config.js` so the demo always looks the same.
+- Minor slots in the timetable aren't tracked.
+- The header image and screenshots in `docs/` are from the sastranet app. I only used them to match
+  the design for this prototype.

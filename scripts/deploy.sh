@@ -1,7 +1,5 @@
 #!/bin/sh
-# Publishes the app to GitHub Pages: https://varunjishgod.github.io/leave-planner/
-# It builds the site into dist/, then pushes ONLY that folder to the "gh-pages" branch.
-# Run it again after any change:  npm run deploy
+# deploy to github pages (npm run deploy)
 set -e
 npm run build
 cd dist
