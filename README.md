@@ -5,6 +5,8 @@ Sastranet shows your attendance. **Leave Planner helps you plan it**: mark the l
 you might skip and instantly see how every subject's attendance and bunk budget change.
 You can also save plans, compare them, and combine them to check for an attendance shortage.
 
+**Live demo:** https://varunjishgod.github.io/leave-planner/ (best on a phone, or in your browser's phone view)
+
 <p>
   <img src="docs/screenshots/planner.jpg" alt="Summary card and saved plans" width="300" />
   &nbsp;
@@ -96,7 +98,8 @@ npm run dev
 Then open the address it prints (usually http://localhost:5173), ideally in your browser's
 phone view at 390px width.
 
-Other commands: `npm run build` (production build) and `npm run lint` (Oxlint).
+Other commands: `npm run build` (production build), `npm run lint` (Oxlint) and
+`npm run deploy` (builds the site and publishes it to GitHub Pages).
 
 ## Notes
 
